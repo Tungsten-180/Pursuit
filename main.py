@@ -21,7 +21,7 @@ async def on_ready():
   print(f'Guild Members:\n - {members}')
 # END^
 
-menu = {"/viewTarget":"shows your target for today", "/enter":"joins the game\n\tHTAP should dm you", "/view":"shows everyone who's joined", "/getpoints":"/getpoints?(who you tagged)?(their key for today)\n\tget points for tagging today", "/score":"/score?(person)\n\tshows the score of (person)"}
+menu = {"/viewTarget":"shows your target for today", "/enter":"joins the game\n\tHTAP should dm you", "/viewPeople":"shows everyone who's joined", "/getpoints":"/getpoints?(who you tagged)?(their key for today)\n\tget points for tagging today", "/score":"/score?(person)\n\tshows the score of (person)"}
 
 @client.event
 async def on_message(message):
@@ -43,7 +43,9 @@ async def on_message(message):
     return
   #COMMMANDS---------------------------------------
   elif string == "/start":
+    #{
     if message.author.id == int(os.getenv("id1")):
+      H.scoring.dailyGen(H.peoples)
       if H.System.initiate_tag() == "try overflow":
         info = H.target_dict
       else:
@@ -53,37 +55,42 @@ async def on_message(message):
       message_channel = client.get_channel(int(os.getenv("botChan")))
       await message_channel.send(info)
       return
+      #}
+      #{
     elif message.author.id == int(os.getenv("id2")):
+      H.scoring.dailyGen(H.peoples)
       if H.System.initiate_tag() == "try overflow":
         info = H.target_dict
       else:
         raw = "\n"+"\n".join([str(x) +'->'+ str(H.target_dict[x]) for x in H.target_dict])
         processed = "\n"+"\n".join([H.peoples[x] +"->"+ H.peoples[H.target_dict[x]] for x in H.target_dict])
         info = "success"
+      #}
     else:
       info = "insufficient permision"
-
-  elif string == "/viewTarget" or string == "/target":
+#
+  elif string == "/viewTarget" or string == "/view" or string == "/target":
     try:
-      info = H.System.view(id)
+      info = str(H.System.view(id))+"\n\tyour key: "+str(gs.keys[id])
     except Exception as e:
       print("exception",e)
-      info = "Error, List problably isn't generated\nTarget Dictionary length: " + str(len(H.target_dict))
-  
+      print("keys:", gs.keys)
+      info = "Error, List problably isn't generated\nTarget Dictionary length: " + str(len(H.target_dict))+"\n\tyour key: "+str(gs.keys[id])
+ # 
   elif string == "/viewPeople":
     info = H.System.viewPeoples()
-
+#
   elif string == "/enter":
     info = H.System.enter(author,id)
-
+#
   elif string.split('?')[0] == "/join":
     teamtoJoin = int(string.split(',')[1])
     info = H.System.join(author,teamtoJoin)
-
+#
   elif string.split('?')[0] == "/getpoints":
-    H.scoring.points(author,string.split('?')[1],string.split('?')[2])
-    info = str(H.pstats[author])
-    
+    H.scoring.points(peoples[author],peoples[string.split('?')[1]],string.split('?')[2])
+    info = str(H.pstats[peoples[author]])
+#    
 
   elif string.split('?')[0] == "/score":
     info = H.scoring.score(string.split('?')[1])
@@ -104,4 +111,3 @@ async def on_message(message):
   
 
 client.run(TOKEN)
-
