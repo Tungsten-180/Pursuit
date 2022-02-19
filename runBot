@@ -1,3 +1,4 @@
 #!/bin/bash
-python3 Pursuit/scheduler.py&
-python3 Pursuit/main.py
+cd "$(dirname "$0")"
+python3 scheduler.py&
+python3 main.py
