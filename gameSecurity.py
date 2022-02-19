@@ -11,15 +11,17 @@ hashes = {}
 keys = {}
 
 def save():
-  global hashes
+  global hashes, keys
   secSav = open(secure_save,'wb')
   pickle.dump(hashes,secSav,-1)
+  pickle.dump(keys,secSav,-1)
   secSav.close()
 def load():
-  global hashes
+  global hashes, keys
   try:
     secSav = open(secure_save,"rb")
     hashes = pickle.load(secSav)
+    keys = pickle.load(secSav)
     secSav.close()
   except Exception as e:
     print(e)
@@ -29,11 +31,12 @@ load()
 
 
 class user:
+  global hashes, chars, keys
   def __init__(self,user):
-    global chars
     key = "".join([chars[randint(0,len(chars)-1)] for x in range(4)])
     print(key)
     keys[user] = key
+    save()
 
   def key(user,key):
     if keys[user] == key:
@@ -42,7 +45,7 @@ class user:
       return(False)
 
   def start(entity,kry):
-    global hashes
+    #global hashes
     kry = bytes(kry,"utf-8")
     m = hashlib.md5(kry)
     print(str(m.digest()))
@@ -51,7 +54,7 @@ class user:
     save()
 
   def check(entity, kry):
-    global hashes
+    #global hashes
     load()
     print(hashes,'@')
     hash = hashlib.md5(bytes(kry,"utf-8")).digest()
@@ -59,3 +62,11 @@ class user:
       return(True)
     else:
       return(False)
+      
+  def clear():
+    #global keys
+    keys = {}
+    save()
+    
+load()
+
