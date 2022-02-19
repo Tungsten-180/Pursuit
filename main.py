@@ -86,7 +86,7 @@ async def on_message(message):
     
 
   elif string.split('?')[0] == "/score":
-    info = H.System.score(string.split('?')[1])
+    info = H.scoring.score(string.split('?')[1])
   # MESSAGE Delivery---------------------------
   elif string == "/menu":
     info = "Pursuit Commands:\n"+"\n".join([x +"\n\t"+ menu[x] for x in menu])
