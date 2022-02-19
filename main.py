@@ -63,7 +63,7 @@ async def on_message(message):
     else:
       info = "insufficient permision"
 
-  elif string == "/viewTarget" or "/" or "/target":
+  elif string == "/viewTarget" or string == "/target":
     try:
       info = H.System.view(id)
     except Exception as e:
