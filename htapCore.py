@@ -224,21 +224,30 @@ class System:
 
 class scoring:
 
-  def points(entity,target,key):
-    if gs.user.key(target,key) == True:
-      pstats[target][1] += 1
-      pstats[entity][0] += 1
+  def dailyGen(peopledict):
+    gs.user.clear()
+    for x in peopledict:
+      if str(x).isdigit() == True:
+        keygen = gs.user(x)
+      elif str(x).isdigit() == False:
+        pass
+      else:
+        return("error")
+        
+  def points(entitydigi,targetdigi,key):
+    if gs.user.key(targetdigi,key) == True:
+      pstats[targetdigi][1] += 1
+      pstats[entitydigi][0] += 1
       save.Save()
     else:
       return("INVALID KEY")
 
-  def score(user):
+  def score(name):
     print(pstats)
-    return(pstats[entity][0]-pstats[entity][1])
+    return(pstats[peoples[name]][0]-pstats[peoples[name]][1])
 
 
 
 save.Load()
 print(peoples)
-
 
